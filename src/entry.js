@@ -1,79 +1,65 @@
-let canvas = document.getElementById("myCanvas");
-let ctx = canvas.getContext("2d");
+import { getBall, drawBall, updateBall } from "./modules/ball";
+import { drawPaddle, updatePaddle, getPaddle } from "./modules/paddle";
+import { getKeyboard, addKeyboardHandlers } from "./modules/keyboard";
+import { MessageBus } from "./modules/messageBus";
 
-// ball stuff //////////////////////////////////////////////////
+let game = {};
+game.canvas = document.getElementById("myCanvas");
+game.ball = getBall(game.canvas);
+game.paddle = getPaddle(game.canvas);
+game.keyboard = getKeyboard();
+game.interval = setInterval(draw, 10);
 
-let x = canvas.width / 2;
-let y = canvas.height - 30;
+let messages = new MessageBus(game);
 
-let dx = 2;
-let dy = -2;
-
-let ballRadius = 10;
-
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}
-
-// paddle stuff ////////////////////////////////////////////////
-
-var paddleHeight = 10;
-var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth) / 2;
-var rightPressed = false;
-var leftPressed = false;
+// keyboard stuff //////////////////////////////////////////////
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-  if(e.key == "Right" || e.key == "ArrowRight") {
-      rightPressed = true;
+  if (e.key == "Right" || e.key == "ArrowRight") {
+    messages.push({ type: "right down" });
   }
-  else if(e.key == "Left" || e.key == "ArrowLeft") {
-      leftPressed = true;
+  else if (e.key == "Left" || e.key == "ArrowLeft") {
+    messages.push({ type: "left down" });
   }
 }
 
 function keyUpHandler(e) {
-  if(e.key == "Right" || e.key == "ArrowRight") {
-      rightPressed = false;
+  if (e.key == "Right" || e.key == "ArrowRight") {
+    messages.push({ type: "right up" });
   }
-  else if(e.key == "Left" || e.key == "ArrowLeft") {
-      leftPressed = false;
+  else if (e.key == "Left" || e.key == "ArrowLeft") {
+    messages.push({ type: "left up" });
   }
-}
-
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
 }
 
 // main ////////////////////////////////////////////////////////
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  messages.concat([
+    { type: "clear screen" },
+    { type: "draw ball" },
+    { type: "draw paddle" },
+    updateBall(game.ball, game.paddle, game.canvas),
+    updatePaddle(game.paddle, game.keyboard, game.canvas),
+  ]);
 
-  drawBall();
-  drawPaddle();
-
-  x += dx;
-  y += dy;
-
-  if (x + dx + ballRadius > canvas.width || x + dx - ballRadius < 0) {
-    dx = -dx;
-  }
-
-  if (y + dy + ballRadius > canvas.height || y + dy - ballRadius < 0) {
-    dy = -dy;
-  }
+  messages.handleMessages();
 }
 
-setInterval(draw, 10);
+/*
+all state updates go thru messaging system
+have queue of messages
+functions that want to perform state update push message to queue
+  message describes what state update the function wants
+on every iteration of game loop:
+  pop each message from queue, get message handler from messageTable,
+  message handler performs state update
+message handler functions are inherently stateful,
+thus they are allowed to not be pure functions
+everything else should be a pure function
+also notice that message queue and game state (ball + paddle) are global
+  is this bad?
+*/
