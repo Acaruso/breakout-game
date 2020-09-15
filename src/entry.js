@@ -19,6 +19,7 @@ addKeyboardHandlers(messageBus);
 function draw() {
   const messages = [
     { type: "clear screen" },
+    { type: "check for win" },
     { type: "draw ball" },
     { type: "draw paddle" },
     { type: "draw blocks" },

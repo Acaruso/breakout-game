@@ -2,22 +2,25 @@ import { drawRect } from "./util";
 
 function getBlocks(canvas) {
   let blocks = [];
-  for (let i = 0; i < 4; i++) {
-    for (let k = 0; k < 4; k++) {
-      blocks.push(getBlock(i, k, canvas.width));
+  const numRows = 2;
+  const numCols = 4;
+
+  for (let i = 0; i < numRows; i++) {
+    for (let k = 0; k < numCols; k++) {
+      blocks.push(getBlock(i, k, numCols, canvas.width));
     }
   }
   return blocks;
 }
 
-function getBlock(row, col, screenWidth) {
+function getBlock(row, col, numCols, screenWidth) {
   // [  ] [  ] [  ] [  ]
   //123456
   // gapTotal = 2, gap = 1, outerWidth = 6, width = 4
 
   const gapTotal = 4;
   const gap = gapTotal / 2;
-  const outerWidth = screenWidth / 4;
+  const outerWidth = screenWidth / numCols;
   const outerHeight = 14;
 
   let block = {};
