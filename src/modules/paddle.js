@@ -12,13 +12,6 @@ function getPaddle(canvas) {
 
 function drawPaddle(paddle, canvas) {
   drawRect(paddle, canvas);
-  
-  // let ctx = canvas.getContext("2d");
-  // ctx.beginPath();
-  // ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
-  // ctx.fillStyle = "#FF5733";
-  // ctx.fill();
-  // ctx.closePath();
 }
 
 function updatePaddle(paddle, keyboard, canvas) {
