@@ -42,8 +42,6 @@ function updateBall(ball, paddle, blocks, canvas) {
     newBall.dy = -newBall.dy;
   } else if (detectPaddleCollision(newBall, paddle)) {
     newBall.dy = -newBall.dy;
-  } else if (detectBottomOfScreenCollision(newBall, paddle, canvas.height)) {
-    return { type: "game over" };
   }
 
   messages.push({ type: "update ball", data: { newBall } });
@@ -79,4 +77,4 @@ function detectBottomOfScreenCollision(ball, paddle, screenHeight) {
   )
 }
 
-export { getBall, drawBall, updateBall };
+export { getBall, drawBall, updateBall, detectBottomOfScreenCollision };

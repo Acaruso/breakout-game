@@ -1,6 +1,6 @@
 import { getGame } from "./modules/game";
-import {  updateBall } from "./modules/ball";
-import { updatePaddle, getPaddle } from "./modules/paddle";
+import { updateBall } from "./modules/ball";
+import { updatePaddle } from "./modules/paddle";
 import { addKeyboardHandlers } from "./modules/keyboard";
 import { MessageBus } from "./modules/messageBus";
 
@@ -14,9 +14,10 @@ function draw() {
     { type: "draw ball" },
     { type: "draw paddle" },
     { type: "draw blocks" },
-    { type: "check for win" },
+    { type: "draw dialog" },
     updateBall(game.ball, game.paddle, game.blocks, game.canvas),
     updatePaddle(game.paddle, game.keyboard, game.canvas),
+    { type: "update game status" },
   ];
 
   // some updates can return array of messages, need to flatten
@@ -36,6 +37,4 @@ on every iteration of game loop:
 message handler functions are inherently stateful,
 thus they are allowed to not be pure functions
 everything else should be a pure function
-also notice that message queue and game state (ball + paddle) are global
-  is this bad?
 */

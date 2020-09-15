@@ -11,6 +11,7 @@ function getGame(draw) {
   game.blocks = getBlocks(game.canvas);
   game.keyboard = getKeyboard();
   game.interval = setInterval(draw, 10);
+  game.status = "in progress";
   return game;
 }
 

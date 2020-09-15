@@ -1,6 +1,7 @@
-import { drawBall } from "./ball";
+import { drawBall, detectBottomOfScreenCollision } from "./ball";
 import { drawPaddle } from "./paddle";
 import { drawBlocks } from "./blocks";
+import { drawWinDialog, drawLostDialog } from "./dialog";
 
 class MessageBus {
   constructor(game) {
@@ -12,12 +13,19 @@ class MessageBus {
         let ctx = this.game.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.game.canvas.width, this.game.canvas.height);
       },
-      "check for win": (message) => {
-
-        if (!this.game.blocks.find(x => x.exists)) {
-          alert("You win :)");
-          document.location.reload();
-          clearInterval(this.game.interval);
+      "update game status": (message) => {
+        const won = (!this.game.blocks.find(x => x.exists));
+        const bottomOfScreenCollision = detectBottomOfScreenCollision(
+          this.game.ball, 
+          this.game.paddle,
+          this.game.canvas.height
+        );
+        const lost = bottomOfScreenCollision && !won;
+        
+        if (won) {
+          this.game.status = "win";
+        } else if (lost) {
+          this.game.status = "lost";
         }
       },
       "update ball": (message) => {
@@ -39,6 +47,10 @@ class MessageBus {
       "draw blocks": (message) => {
         drawBlocks(this.game.blocks, this.game.canvas);
       },
+      "draw dialog": (message) => {
+        drawWinDialog(this.game.status, this.game.canvas);
+        drawLostDialog(this.game.status, this.game.canvas);
+      },
       "right down": (message) => {
         this.game.keyboard.right = true;
       },
@@ -50,11 +62,6 @@ class MessageBus {
       },
       "left up": (message) => {
         this.game.keyboard.left = false;
-      },
-      "game over": (message) => {
-        alert("GAME OVER");
-        document.location.reload();
-        clearInterval(this.game.interval);
       },
     };
   }
