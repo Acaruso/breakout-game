@@ -2,6 +2,7 @@ import { drawBall, detectBottomOfScreenCollision } from "./ball";
 import { drawPaddle } from "./paddle";
 import { drawBlocks } from "./blocks";
 import { drawWinDialog, drawLostDialog } from "./dialog";
+import { restartGame, logGame } from "./game";
 
 class MessageBus {
   constructor(game) {
@@ -62,6 +63,12 @@ class MessageBus {
       },
       "left up": (message) => {
         this.game.keyboard.left = false;
+      },
+      "enter down": (message) => {
+        restartGame(this.game);
+      },
+      "z down": (message) => {
+        logGame(this.game);
       },
     };
   }

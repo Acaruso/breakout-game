@@ -14,7 +14,12 @@ function drawPaddle(paddle, canvas) {
   drawRect(paddle, canvas);
 }
 
-function updatePaddle(paddle, keyboard, canvas) {
+function updatePaddle(paddle, keyboard, status, canvas) {
+  // why does this lag out?
+  // if (status !== "in progress") {
+  //   return;
+  // }
+
   let newPaddle = { ...paddle };
 
   if (keyboard.right) {

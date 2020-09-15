@@ -19,10 +19,14 @@ function drawBall(ball, canvas) {
   ctx.closePath();
 }
 
-function updateBall(ball, paddle, blocks, canvas) {
+function updateBall(ball, paddle, blocks, status, canvas) {
   let messages = [];
 
   let newBall = { ...ball };
+
+  if (status !== "in progress") {
+    return;
+  }
 
   newBall.x += newBall.dx;
   newBall.y += newBall.dy;

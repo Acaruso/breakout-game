@@ -15,4 +15,22 @@ function getGame(draw) {
   return game;
 }
 
-export { getGame };
+function restartGame(game) {
+  game.ball = getBall(game.canvas);
+  game.paddle = getPaddle(game.canvas);
+  game.blocks = getBlocks(game.canvas);
+  game.status = "in progress";
+}
+
+function logGame(game) {
+  console.log("ball");
+  console.log(game.ball);
+  console.log("paddle");
+  console.log(game.paddle);
+  console.log("blocks");
+  console.log(game.blocks);
+  console.log("status");
+  console.log(game.status);
+}
+
+export { getGame, restartGame, logGame };

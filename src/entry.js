@@ -15,8 +15,9 @@ function draw() {
     { type: "draw paddle" },
     { type: "draw blocks" },
     { type: "draw dialog" },
-    updateBall(game.ball, game.paddle, game.blocks, game.canvas),
-    updatePaddle(game.paddle, game.keyboard, game.canvas),
+    updateBall(game.ball, game.paddle, game.blocks, game.status, game.canvas),
+    // updatePaddle(game.paddle, game.keyboard, game.canvas),
+    updatePaddle(game.paddle, game.keyboard, game.status, game.canvas),
     { type: "update game status" },
   ];
 
