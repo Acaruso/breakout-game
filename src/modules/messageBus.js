@@ -3,11 +3,13 @@ import { drawPaddle } from "./paddle";
 import { drawBlocks } from "./blocks";
 import { drawWinDialog, drawLostDialog } from "./dialog";
 import { restartGame, logGame } from "./game";
+import { Logger } from "./logger";
 
 class MessageBus {
   constructor(game) {
     this.game = game;
     this.messages = [];
+    this.logger = new Logger("log.txt");
 
     this.messageTable = {
       "clear screen": (message) => {
@@ -85,6 +87,7 @@ class MessageBus {
     let message = null;
     while (message = this.messages.shift()) {
       this.messageTable[message.type](message);
+      this.logger.log(JSON.stringify(message));
     }
   }
 }

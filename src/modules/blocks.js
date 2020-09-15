@@ -2,7 +2,7 @@ import { drawRect } from "./util";
 
 function getBlocks(canvas) {
   let blocks = [];
-  const numRows = 1;
+  const numRows = 3;
   const numCols = 4;
 
   for (let i = 0; i < numRows; i++) {
