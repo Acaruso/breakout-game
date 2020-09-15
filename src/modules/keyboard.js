@@ -6,24 +6,27 @@ function getKeyboard() {
 }
 
 function addKeyboardHandlers(messages) {
-  function keyDownHandler(e) {
-    if (e.key == "Right" || e.key == "ArrowRight") {
-      messages.push({ type: "right down" });
-    } else if (e.key == "Left" || e.key == "ArrowLeft") {
-      messages.push({ type: "left down" });
-    }
-  }
+  const keyDownHandlersTable = {
+    ArrowRight: () => messages.push({ type: "right down" }),
+    ArrowLeft: () => messages.push({ type: "left down" }),
+  };
 
-  function keyUpHandler(e) {
-    if (e.key == "Right" || e.key == "ArrowRight") {
-      messages.push({ type: "right up" });
-    } else if (e.key == "Left" || e.key == "ArrowLeft") {
-      messages.push({ type: "left up" });
-    }
-  }
+  const keyUpHandlersTable = {
+    ArrowRight: () => messages.push({ type: "right up" }),
+    ArrowLeft: () => messages.push({ type: "left up" }),
+  };
 
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
+  document.addEventListener(
+    "keydown", 
+    e => keyDownHandlersTable[e.key](), 
+    false
+  );
+
+  document.addEventListener(
+    "keyup", 
+    e => keyUpHandlersTable[e.key](), 
+    false
+  );
 }
 
 export { getKeyboard, addKeyboardHandlers };
