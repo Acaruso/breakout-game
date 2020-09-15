@@ -1,20 +1,24 @@
+import { drawRect } from "./util";
+
 function getPaddle(canvas) {
   let paddle = {
     height: 10,
     width: 75,
-    x: 0,
   };
   paddle.x = (canvas.width - paddle.width) / 2;
+  paddle.y = canvas.height - paddle.height;
   return paddle;
 }
 
 function drawPaddle(paddle, canvas) {
-  let ctx = canvas.getContext("2d");
-  ctx.beginPath();
-  ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
-  ctx.fillStyle = "#FF5733";
-  ctx.fill();
-  ctx.closePath();
+  drawRect(paddle, canvas);
+  
+  // let ctx = canvas.getContext("2d");
+  // ctx.beginPath();
+  // ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+  // ctx.fillStyle = "#FF5733";
+  // ctx.fill();
+  // ctx.closePath();
 }
 
 function updatePaddle(paddle, keyboard, canvas) {

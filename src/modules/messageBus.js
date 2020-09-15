@@ -1,5 +1,6 @@
 import { drawBall } from "./ball";
 import { drawPaddle } from "./paddle";
+import { drawBlocks } from "./blocks";
 
 class MessageBus {
   constructor(game) {
@@ -22,6 +23,9 @@ class MessageBus {
       },
       "draw paddle": (message) => {
         drawPaddle(this.game.paddle, this.game.canvas);
+      },
+      "draw blocks": (message) => {
+        drawBlocks(this.game.blocks, this.game.canvas);
       },
       "right down": (message) => {
         this.game.keyboard.right = true;
