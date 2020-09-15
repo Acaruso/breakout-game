@@ -13,6 +13,7 @@ class MessageBus {
         ctx.clearRect(0, 0, this.game.canvas.width, this.game.canvas.height);
       },
       "check for win": (message) => {
+
         if (!this.game.blocks.find(x => x.exists)) {
           alert("You win :)");
           document.location.reload();

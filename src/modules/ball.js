@@ -34,7 +34,7 @@ function updateBall(ball, paddle, blocks, canvas) {
     newBall.dx = -newBall.dx;
   }
 
-  let blockToRemove = detectBlockCollision(newBall, blocks);
+  const blockToRemove = detectBlockCollision(newBall, blocks);
   if (blockToRemove !== -1) {
     newBall.dy = -newBall.dy;
     messages.push({ type: "remove block", data: { blockToRemove } });
@@ -51,7 +51,7 @@ function updateBall(ball, paddle, blocks, canvas) {
 }
 
 function detectBlockCollision(ball, blocks) {
-  let square = getSquareFromCircle(ball);
+  const square = getSquareFromCircle(ball);
 
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];

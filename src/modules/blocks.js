@@ -2,8 +2,8 @@ import { drawRect } from "./util";
 
 function getBlocks(canvas) {
   let blocks = [];
-  const numRows = 2;
-  const numCols = 4;
+  const numRows = 1;
+  const numCols = 1;
 
   for (let i = 0; i < numRows; i++) {
     for (let k = 0; k < numCols; k++) {
@@ -34,7 +34,7 @@ function getBlock(row, col, numCols, screenWidth) {
 
 function drawBlocks(blocks, canvas) {
   blocks
-    .filter((x) => x.exists)
+    .filter(x => x.exists)
     .forEach(x => drawRect(x, canvas));
 }
 

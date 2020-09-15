@@ -1,28 +1,20 @@
-import { getBall, drawBall, updateBall } from "./modules/ball";
-import { drawPaddle, updatePaddle, getPaddle } from "./modules/paddle";
-import { getKeyboard, addKeyboardHandlers } from "./modules/keyboard";
-import { getBlocks, drawBlocks } from "./modules/blocks";
+import { getGame } from "./modules/game";
+import {  updateBall } from "./modules/ball";
+import { updatePaddle, getPaddle } from "./modules/paddle";
+import { addKeyboardHandlers } from "./modules/keyboard";
 import { MessageBus } from "./modules/messageBus";
 
-let game = {};
-game.canvas = document.getElementById("myCanvas");
-game.ball = getBall(game.canvas);
-game.paddle = getPaddle(game.canvas);
-game.blocks = getBlocks(game.canvas);
-game.keyboard = getKeyboard();
-game.interval = setInterval(draw, 10);
-
+let game = getGame(draw);
 let messageBus = new MessageBus(game);
-
 addKeyboardHandlers(messageBus);
 
 function draw() {
   const messages = [
     { type: "clear screen" },
-    { type: "check for win" },
     { type: "draw ball" },
     { type: "draw paddle" },
     { type: "draw blocks" },
+    { type: "check for win" },
     updateBall(game.ball, game.paddle, game.blocks, game.canvas),
     updatePaddle(game.paddle, game.keyboard, game.canvas),
   ];
