@@ -12,21 +12,24 @@ game.blocks = getBlocks(game.canvas);
 game.keyboard = getKeyboard();
 game.interval = setInterval(draw, 10);
 
-let messages = new MessageBus(game);
+let messageBus = new MessageBus(game);
 
-addKeyboardHandlers(messages);
+addKeyboardHandlers(messageBus);
 
 function draw() {
-  messages.concat([
+  const messages = [
     { type: "clear screen" },
     { type: "draw ball" },
     { type: "draw paddle" },
     { type: "draw blocks" },
-    updateBall(game.ball, game.paddle, game.canvas),
+    updateBall(game.ball, game.paddle, game.blocks, game.canvas),
     updatePaddle(game.paddle, game.keyboard, game.canvas),
-  ]);
+  ];
 
-  messages.handleMessages();
+  // some updates can return array of messages, need to flatten
+  messageBus.concat(messages.flat());
+
+  messageBus.handleMessages();
 }
 
 /*

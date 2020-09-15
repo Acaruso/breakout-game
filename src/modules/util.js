@@ -7,4 +7,23 @@ function drawRect(rect, canvas) {
   ctx.closePath();
 }
 
-export { drawRect };
+function detectRectCollision(rect1, rect2) {
+  return (
+    rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y
+  );
+}
+
+function getSquareFromCircle(circle) {
+  let square = {};
+  square.x = circle.x - circle.radius;
+  square.y = circle.y - circle.radius;
+  square.width = circle.radius * 2;
+  square.height = circle.radius * 2;
+  return square;
+}
+
+
+export { drawRect, detectRectCollision, getSquareFromCircle };

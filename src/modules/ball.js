@@ -1,3 +1,5 @@
+import { detectRectCollision, getSquareFromCircle } from "./util";
+
 function getBall(canvas) {
   return {
     x: canvas.width / 2,
@@ -17,7 +19,9 @@ function drawBall(ball, canvas) {
   ctx.closePath();
 }
 
-function updateBall(ball, paddle, canvas) {
+function updateBall(ball, paddle, blocks, canvas) {
+  let messages = [];
+
   let newBall = { ...ball };
 
   newBall.x += newBall.dx;
@@ -30,7 +34,11 @@ function updateBall(ball, paddle, canvas) {
     newBall.dx = -newBall.dx;
   }
 
-  if (detectTopOfScreenCollision(newBall)) {
+  let blockToRemove = detectBlockCollision(newBall, blocks);
+  if (blockToRemove !== -1) {
+    newBall.dy = -newBall.dy;
+    messages.push({ type: "remove block", data: { blockToRemove } });
+  } else if (detectTopOfScreenCollision(newBall)) {
     newBall.dy = -newBall.dy;
   } else if (detectPaddleCollision(newBall, paddle)) {
     newBall.dy = -newBall.dy;
@@ -38,7 +46,20 @@ function updateBall(ball, paddle, canvas) {
     return { type: "game over" };
   }
 
-  return { type: "update ball", data: { newBall } }
+  messages.push({ type: "update ball", data: { newBall } });
+  return messages;
+}
+
+function detectBlockCollision(ball, blocks) {
+  let square = getSquareFromCircle(ball);
+
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    if (block.exists && detectRectCollision(square, block)) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 function detectTopOfScreenCollision(ball) {
@@ -47,11 +68,16 @@ function detectTopOfScreenCollision(ball) {
 }
 
 function detectPaddleCollision(ball, paddle) {
-  const nextY = ball.y + ball.dy;
-  return (nextY + ball.radius >= paddle.y && 
-    (ball.x >= paddle.x && ball.x <= paddle.x + paddle.width)
-  )
+  let square = getSquareFromCircle(ball);
+  return detectRectCollision(square, paddle);
 }
+
+// function detectPaddleCollision(ball, paddle) {
+//   const nextY = ball.y + ball.dy;
+//   return (nextY + ball.radius >= paddle.y && 
+//     (ball.x >= paddle.x && ball.x <= paddle.x + paddle.width)
+//   )
+// }
 
 function detectBottomOfScreenCollision(ball, paddle, screenHeight) {
   const nextY = ball.y + ball.dy;

@@ -18,6 +18,10 @@ class MessageBus {
       "update paddle": (message) => {
         this.game.paddle = message.data.newPaddle;
       },
+      "remove block": (message) => {
+        const i = message.data.blockToRemove;
+        this.game.blocks[i].exists = false;
+      },
       "draw ball": (message) => {
         drawBall(this.game.ball, this.game.canvas);
       },
