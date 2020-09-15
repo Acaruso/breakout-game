@@ -25,5 +25,4 @@ function getSquareFromCircle(circle) {
   return square;
 }
 
-
 export { drawRect, detectRectCollision, getSquareFromCircle };

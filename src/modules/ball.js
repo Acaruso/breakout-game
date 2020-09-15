@@ -72,13 +72,6 @@ function detectPaddleCollision(ball, paddle) {
   return detectRectCollision(square, paddle);
 }
 
-// function detectPaddleCollision(ball, paddle) {
-//   const nextY = ball.y + ball.dy;
-//   return (nextY + ball.radius >= paddle.y && 
-//     (ball.x >= paddle.x && ball.x <= paddle.x + paddle.width)
-//   )
-// }
-
 function detectBottomOfScreenCollision(ball, paddle, screenHeight) {
   const nextY = ball.y + ball.dy;
   return (nextY >= screenHeight && 
