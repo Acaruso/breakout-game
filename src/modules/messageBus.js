@@ -1,7 +1,7 @@
 import { drawBall, detectBottomOfScreenCollision } from "./ball";
 import { drawPaddle } from "./paddle";
 import { drawBlocks } from "./blocks";
-import { drawWinDialog, drawLostDialog } from "./dialog";
+import { drawWinDialog, drawLostDialog, drawDebugDialog } from "./dialog";
 import { restartGame, logGame } from "./game";
 import { Logger } from "./logger";
 
@@ -38,6 +38,9 @@ class MessageBus {
       "update paddle": (message) => {
         this.game.paddle = message.data.newPaddle;
       },
+      "update debug text": (message) => {
+        this.game.debugText = message.data.newDebugText;
+      },
       "remove block": (message) => {
         const i = message.data.blockToRemove;
         this.game.blocks[i].exists = false;
@@ -54,6 +57,9 @@ class MessageBus {
       "draw dialog": (message) => {
         drawWinDialog(this.game.status, this.game.canvas);
         drawLostDialog(this.game.status, this.game.canvas);
+      },
+      "draw debug dialog" : (message) => {
+        drawDebugDialog(this.game.debugText, this.game.canvas);
       },
       "right down": (message) => {
         this.game.keyboard.right = true;

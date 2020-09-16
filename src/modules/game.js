@@ -12,6 +12,7 @@ function getGame(draw, options = {}) {
   game.blocks = getBlocks(game.canvas);
   game.keyboard = getKeyboard();
   game.status = "in progress";
+  game.debugText = "";
   return game;
 }
 
