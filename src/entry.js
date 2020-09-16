@@ -5,15 +5,17 @@ import { addKeyboardHandlers } from "./modules/keyboard";
 import { MessageBus } from "./modules/messageBus";
 import { updateDebugText } from "./modules/dialog";
 
+const replay = false;
+const replayRecalc = true;
+const logging = true;
+
 let game = getGame(draw);
-let messageBus = new MessageBus(game, { logging: true });
+let messageBus = new MessageBus(game, { logging: logging && !replay && !replayRecalc });
 addKeyboardHandlers(messageBus);
 
 // replay stuff ///////////////////////////////////////////
 
-const replay = false;
-const replayRecalc = false;
-const file = "logs/bug-log.txt";
+const file = "bug-log2Copy.txt";
 const speed = 1;
 const intervalTime = (1.0 / speed) * 10.0;
 
