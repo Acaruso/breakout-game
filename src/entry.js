@@ -27,11 +27,12 @@ if (replay) {
     const message = JSON.parse(line);
     messageBus.push(message);
     if (message.type === "end of draw loop") {
-      messageBus.push(updateDebugText(count++));
+      messageBus.push(updateDebugText(count));
       messageBus.push({ type: "draw debug dialog" });
       messageBus.handleMessages();
       lr.pause();
     }
+    count++;
   });
 
   setInterval(() => lr.resume(), intervalTime);
