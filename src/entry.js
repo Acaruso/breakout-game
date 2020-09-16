@@ -5,13 +5,14 @@ import { addKeyboardHandlers } from "./modules/keyboard";
 import { MessageBus } from "./modules/messageBus";
 
 let game = getGame(draw);
+// let messageBus = new MessageBus(game, { logging: true });
 let messageBus = new MessageBus(game);
 addKeyboardHandlers(messageBus);
 
 // replay stuff ///////////////////////////////////////////
 
 const replay = true;
-const file = "logs/1600216966682-log.txt";
+const file = "logs/bug-log.txt";
 
 if (replay) {
   const LineByLineReader = require("line-by-line");

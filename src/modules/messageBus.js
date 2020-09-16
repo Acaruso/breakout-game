@@ -6,10 +6,11 @@ import { restartGame, logGame } from "./game";
 import { Logger } from "./logger";
 
 class MessageBus {
-  constructor(game) {
+  constructor(game, options = {}) {
     this.game = game;
+    this.options = options;
     this.messages = [];
-    this.logger = new Logger("log.txt");
+    this.logger = this.options.logging ? new Logger("log.txt") : {};
 
     this.messageTable = {
       "clear screen": (message) => {
@@ -89,7 +90,9 @@ class MessageBus {
     while (message = this.messages.shift()) {
       if (this.messageTable[message.type]) {
         this.messageTable[message.type](message);
-        this.logger.log(JSON.stringify(message));
+        if (this.options.logging) {
+          this.logger.log(JSON.stringify(message));
+        }
       }
     }
   }
