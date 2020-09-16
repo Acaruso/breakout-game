@@ -3,7 +3,8 @@ import { getPaddle } from "./paddle";
 import { getKeyboard } from "./keyboard";
 import { getBlocks } from "./blocks";
 
-function getGame(draw) {
+function getGame(draw, options = {}) {
+  const { replay, file } = options;
   let game = {};
   game.canvas = document.getElementById("myCanvas");
   game.ball = getBall(game.canvas);
