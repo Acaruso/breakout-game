@@ -6,15 +6,15 @@ import { MessageBus } from "./modules/messageBus";
 import { updateDebugText } from "./modules/dialog";
 
 let game = getGame(draw);
-// let messageBus = new MessageBus(game, { logging: true });
-let messageBus = new MessageBus(game);
+let messageBus = new MessageBus(game, { logging: true });
 addKeyboardHandlers(messageBus);
 
 // replay stuff ///////////////////////////////////////////
 
-const replay = true;
+const replay = false;
+const replayRecalc = false;
 const file = "logs/bug-log.txt";
-const speed = 0.25;
+const speed = 1;
 const intervalTime = (1.0 / speed) * 10.0;
 
 if (replay) {
@@ -26,6 +26,46 @@ if (replay) {
   lr.on("line", (line) => {
     const message = JSON.parse(line);
     messageBus.push(message);
+    if (message.type === "end of draw loop") {
+      messageBus.push(updateDebugText(count));
+      messageBus.push({ type: "draw debug dialog" });
+      messageBus.handleMessages();
+      lr.pause();
+    }
+    count++;
+  });
+
+  setInterval(() => lr.resume(), intervalTime);
+} else if (replayRecalc) {
+  const LineByLineReader = require("line-by-line");
+  const lr = new LineByLineReader(file);
+
+  let count = 0;
+
+  lr.on("line", (line) => {
+    const message = JSON.parse(line);
+
+    if (message.type === "update ball") {
+      const ballMess = updateBall(
+        game.ball, 
+        game.paddle, 
+        game.blocks, 
+        game.status, 
+        game.canvas
+      );
+      messageBus.push(ballMess);
+    } else if (message.type === "update paddle") {
+      const paddleMess = updatePaddle(
+        game.paddle, 
+        game.keyboard, 
+        game.status, 
+        game.canvas
+      );
+      messageBus.push(paddleMess);
+    } else {
+      messageBus.push(message);
+    }
+    
     if (message.type === "end of draw loop") {
       messageBus.push(updateDebugText(count));
       messageBus.push({ type: "draw debug dialog" });
@@ -55,8 +95,7 @@ function draw() {
     { type: "end of draw loop" },
   ];
 
-  // some updates can return array of messages, need to flatten
-  messageBus.concat(messages.flat());
+  messageBus.push(messages);
 
   messageBus.handleMessages();
 }

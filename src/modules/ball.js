@@ -20,31 +20,25 @@ function drawBall(ball, canvas) {
 }
 
 function updateBall(ball, paddle, blocks, status, canvas) {
-  let messages = [];
-
-  let newBall = { ...ball };
-
   if (status !== "in progress") {
     return;
   }
 
-  newBall.x += newBall.dx;
-  newBall.y += newBall.dy;
+  let messages = [];
+  let newBall = getNextBall(ball);
+  let futureBall = getNextBall(newBall);
 
-  if (
-    newBall.x + newBall.dx + newBall.radius > canvas.width ||
-    newBall.x + newBall.dx - newBall.radius < 0
-  ) {
+  if (detectSideOfScreenCollision(futureBall, canvas.width)) {
     newBall.dx = -newBall.dx;
   }
 
-  const blockToRemove = detectBlockCollision(newBall, blocks);
+  const blockToRemove = detectBlockCollision(futureBall, blocks);
   if (blockToRemove !== -1) {
     newBall.dy = -newBall.dy;
     messages.push({ type: "remove block", data: { blockToRemove } });
-  } else if (detectTopOfScreenCollision(newBall)) {
+  } else if (detectTopOfScreenCollision(futureBall)) {
     newBall.dy = -newBall.dy;
-  } else if (detectPaddleCollision(newBall, paddle)) {
+  } else if (detectPaddleCollision(futureBall, paddle)) {
     newBall.dy = -newBall.dy;
   }
 
@@ -64,9 +58,15 @@ function detectBlockCollision(ball, blocks) {
   return -1;
 }
 
+function detectSideOfScreenCollision(ball, screenWidth) {
+  return (
+    ball.x + ball.radius > screenWidth ||
+    ball.x - ball.radius < 0
+  );
+}
+
 function detectTopOfScreenCollision(ball) {
-  const nextY = ball.y + ball.dy;
-  return (nextY - ball.radius < 0)
+  return ball.y - ball.radius < 0;
 }
 
 function detectPaddleCollision(ball, paddle) {
@@ -75,10 +75,14 @@ function detectPaddleCollision(ball, paddle) {
 }
 
 function detectBottomOfScreenCollision(ball, paddle, screenHeight) {
-  const nextY = ball.y + ball.dy;
-  return (nextY >= screenHeight && 
-    (ball.x < paddle.x || ball.x > paddle.x + paddle.width)
-  )
+  return (ball.y >= screenHeight && !detectPaddleCollision(ball, paddle));
+}
+
+function getNextBall(ball) {
+  let nextBall = { ...ball };
+  nextBall.x += nextBall.dx;
+  nextBall.y += nextBall.dy;
+  return nextBall;
 }
 
 export { getBall, drawBall, updateBall, detectBottomOfScreenCollision };
