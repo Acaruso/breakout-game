@@ -72,6 +72,7 @@ class MessageBus {
       "z down": (message) => {
         logGame(this.game);
       },
+      "end of draw loop": (message) => { },
     };
   }
 
@@ -86,8 +87,10 @@ class MessageBus {
   handleMessages() {
     let message = null;
     while (message = this.messages.shift()) {
-      this.messageTable[message.type](message);
-      this.logger.log(JSON.stringify(message));
+      if (this.messageTable[message.type]) {
+        this.messageTable[message.type](message);
+        this.logger.log(JSON.stringify(message));
+      }
     }
   }
 }
