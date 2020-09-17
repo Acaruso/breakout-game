@@ -1,87 +1,90 @@
-import { drawBall, detectBottomOfScreenCollision } from "./ball";
-import { drawPaddle } from "./paddle";
-import { drawBlocks } from "./blocks";
+import { getBall, drawBall, detectBottomOfScreenCollision } from "./ball";
+import { getPaddle, drawPaddle } from "./paddle";
+import { getBlocks, drawBlocks } from "./blocks";
 import { drawWinDialog, drawLostDialog, drawDebugDialog } from "./dialog";
 import { restartGame, logGame } from "./game";
 import { Logger } from "./logger";
 
 class MessageBus {
-  constructor(game, options = {}) {
-    this.game = game;
-    this.options = options;
+  constructor(state, options = {}) {
+    this.state = state;
     this.messages = [];
-    this.logger = this.options.logging ? new Logger("log.txt") : {};
+
+    this.logging = options.logging;
+    this.logger = options.logger;
 
     this.messageTable = {
       "clear screen": (message) => {
-        let ctx = this.game.canvas.getContext("2d");
-        ctx.clearRect(0, 0, this.game.canvas.width, this.game.canvas.height);
+        let ctx = this.state.canvas.getContext("2d");
+        ctx.clearRect(0, 0, this.state.canvas.width, this.state.canvas.height);
       },
       "update game status": (message) => {
-        if (this.game.status === "restart") {
-          restartGame(this.game);
-          return;
-        }
-        const won = (!this.game.blocks.find(x => x.exists));
+        const won = (!this.state.blocks.find(x => x.exists));
         const lost = detectBottomOfScreenCollision(
-          this.game.ball, 
-          this.game.paddle,
-          this.game.canvas.height
+          this.state.ball, 
+          this.state.paddle,
+          this.state.canvas.height
         );
         
         if (won) {
-          this.game.status = "win";
+          this.state.status = "win";
         } else if (lost) {
-          this.game.status = "lost";
+          this.state.status = "lost";
         }
       },
       "update ball": (message) => {
-        this.game.ball = message.data.ball;
+        this.state.ball = message.data.ball;
       },
       "update paddle": (message) => {
-        this.game.paddle = message.data.paddle;
+        this.state.paddle = message.data.paddle;
       },
       "update debug text": (message) => {
-        this.game.debugText = message.data.newDebugText;
+        this.state.debugText = message.data.newDebugText;
       },
       "remove block": (message) => {
         const i = message.data.blockToRemove;
-        this.game.blocks[i].exists = false;
+        this.state.blocks[i].exists = false;
       },
       "draw ball": (message) => {
-        drawBall(this.game.ball, this.game.canvas);
+        drawBall(this.state.ball, this.state.canvas);
       },
       "draw paddle": (message) => {
-        drawPaddle(this.game.paddle, this.game.canvas);
+        drawPaddle(this.state.paddle, this.state.canvas);
       },
       "draw blocks": (message) => {
-        drawBlocks(this.game.blocks, this.game.canvas);
+        drawBlocks(this.state.blocks, this.state.canvas);
       },
       "draw dialog": (message) => {
-        drawWinDialog(this.game.status, this.game.canvas);
-        drawLostDialog(this.game.status, this.game.canvas);
+        drawWinDialog(this.state.status, this.state.canvas);
+        drawLostDialog(this.state.status, this.state.canvas);
       },
       "draw debug dialog" : (message) => {
-        drawDebugDialog(this.game.debugText, this.game.canvas);
+        drawDebugDialog(this.state.debugText, this.state.canvas);
       },
       "right down": (message) => {
-        this.game.keyboard.right = true;
+        this.state.keyboard.right = true;
       },
       "left down": (message) => {
-        this.game.keyboard.left = true;
+        this.state.keyboard.left = true;
       },
       "right up": (message) => {
-        this.game.keyboard.right = false;
+        this.state.keyboard.right = false;
       },
       "left up": (message) => {
-        this.game.keyboard.left = false;
+        this.state.keyboard.left = false;
       },
       "enter down": (message) => {
-        this.game.status = "restart";
-        // restartGame(this.game);
+        // this.game.status = "restart";
+
+        this.state.ball = getBall(state.canvas);
+        this.state.paddle = getPaddle(state.canvas);
+        this.state.blocks = getBlocks(state.canvas);
+        this.state.status = "in progress";
+      
+        // restartGame(this.state);
       },
       "z down": (message) => {
-        logGame(this.game);
+        logGame(this.state);
       },
       "end of draw loop": (message) => { },
     };
@@ -104,11 +107,9 @@ class MessageBus {
     while (message = this.messages.shift()) {
       if (this.messageTable[message.type]) {
         this.messageTable[message.type](message);
-
-        // console.log(message)
-
-        if (this.options.logging) {
+        if (this.logging) {
           this.logger.log(JSON.stringify(message));
+          this.logger.log(JSON.stringify(this.state.ball));
         }
       }
     }

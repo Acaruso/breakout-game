@@ -3,11 +3,14 @@ import { getPaddle, updatePaddle } from "./paddle";
 import { getKeyboard, addKeyboardHandlers } from "./keyboard";
 import { getBlocks } from "./blocks";
 import { MessageBus } from "./messageBus";
+import { Logger } from "./logger";
 
 class Game {
   constructor(options = {}) {
     let { logging, replay, replayRecalc } = options;
+
     logging = logging && !replay && !replayRecalc; // don't log if replaying
+    this.logger = logging ? new Logger("log.txt") : {};
 
     this.state = {};
     this.state.canvas = document.getElementById("myCanvas");
@@ -18,7 +21,10 @@ class Game {
     this.state.status = "in progress";
     this.state.debugText = "";
 
-    this.messageBus = new MessageBus(this.state, { logging: logging  });
+    this.messageBus = new MessageBus(this.state, {
+      logging: logging,
+      logger: this.logger,
+    });
 
     addKeyboardHandlers(this.messageBus);
 
@@ -95,7 +101,8 @@ class Game {
       setInterval(() => lr.resume(), intervalTime);
     } else {
       this.state.interval = setInterval(
-        () => this.draw(this.state, this.messageBus), 
+        () => this.draw(),
+        // () => this.draw(this.state, this.messageBus),
         10
       );
     }
@@ -103,41 +110,69 @@ class Game {
 
   ///////////////////////////////////////////////////////////////////
 
-  draw(state, messageBus) {
-    const messages = [
+  draw() {
+    let messages = [
       { type: "clear screen" },
       { type: "update game status" },
-
       { type: "draw ball" },
       { type: "draw paddle" },
       { type: "draw blocks" },
       { type: "draw dialog" },
       updateBall(
-        state.ball,
-        state.paddle,
-        state.blocks,
-        state.status,
-        state.canvas
+        this.state.ball,
+        this.state.paddle,
+        this.state.blocks,
+        this.state.status,
+        this.state.canvas
       ),
       updatePaddle(
-        state.paddle,
-        state.keyboard,
-        state.status,
-        state.canvas
+        this.state.paddle,
+        this.state.keyboard,
+        this.state.status,
+        this.state.canvas
       ),
       { type: "end of draw loop" },
     ];
 
-    messageBus.push(messages);
-    messageBus.handleMessages();
+    this.messageBus.push(messages);
+    this.messageBus.handleMessages();
   }
+
+  // draw(state, messageBus) {
+  //   const messages = [
+  //     { type: "clear screen" },
+  //     { type: "update game status" },
+
+  //     { type: "draw ball" },
+  //     { type: "draw paddle" },
+  //     { type: "draw blocks" },
+  //     { type: "draw dialog" },
+  //     updateBall(
+  //       state.ball,
+  //       state.paddle,
+  //       state.blocks,
+  //       state.status,
+  //       state.canvas
+  //     ),
+  //     updatePaddle(
+  //       state.paddle,
+  //       state.keyboard,
+  //       state.status,
+  //       state.canvas
+  //     ),
+  //     { type: "end of draw loop" },
+  //   ];
+
+  //   messageBus.push(messages);
+  //   messageBus.handleMessages();
+  // }
 }
 
-function restartGame(game) {
-  game.ball = getBall(game.canvas);
-  game.paddle = getPaddle(game.canvas);
-  game.blocks = getBlocks(game.canvas);
-  game.status = "in progress";
+function restartGame(state) {
+  state.ball = getBall(state.canvas);
+  state.paddle = getPaddle(state.canvas);
+  state.blocks = getBlocks(state.canvas);
+  state.status = "in progress";
 }
 
 function logGame(game) {
