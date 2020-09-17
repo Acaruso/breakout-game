@@ -1,4 +1,5 @@
 import { detectRectCollision, getSquareFromCircle } from "./util";
+import { getBlocks } from "./blocks";
 
 function getBall(canvas) {
   return {
@@ -19,13 +20,24 @@ function drawBall(ball, canvas) {
   ctx.closePath();
 }
 
-function updateBall(ball, paddle, blocks, status, canvas) {
-  if (status !== "in progress") {
-    return;
-    // return { type: "update ball", data: { ball: ball } };
+function updateBall(state) {
+  let { ball, paddle, blocks, keyboard, status, canvas } = state;
+  let messages = [];
+
+  if (keyboard.enter) {
+    let newBall = getBall(canvas);
+    let newBlocks = getBlocks(canvas);
+
+    messages.push({ type: "update ball", data: { ball: newBall } });
+    messages.push({ type: "update blocks", data: { blocks: newBlocks } });
+    messages.push({ type: "update game status", data: { status: "in progress" } });
+
+    return messages;
+  } else if (status !== "in progress") {
+    // return;
+    return { type: "update ball", data: { ball: ball } };
   }
 
-  let messages = [];
   let newBall = getNextBall(ball);
   let futureBall = getNextBall(newBall);
 

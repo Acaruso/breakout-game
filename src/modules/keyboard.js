@@ -2,6 +2,7 @@ function getKeyboard() {
   return {
     right: false,
     left: false,
+    enter: false,
   };
 }
 
@@ -16,6 +17,7 @@ function addKeyboardHandlers(messages) {
   const keyUpHandlersTable = {
     ArrowRight: () => messages.push({ type: "right up" }),
     ArrowLeft: () => messages.push({ type: "left up" }),
+    Enter: () => messages.push({ type: "enter up" }),
   };
 
   function keyDownHandler(e) {

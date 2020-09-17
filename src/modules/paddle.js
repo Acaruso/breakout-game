@@ -15,14 +15,16 @@ function drawPaddle(paddle, canvas) {
 }
 
 function updatePaddle(paddle, keyboard, status, canvas) {
-  // why does this lag out?
-  // if (status !== "in progress") {
-  //   return { type: "update paddle", data: { paddle } };
-  // }
+  if (status !== "in progress") {
+    return { type: "update paddle", data: { paddle } };
+  }
 
   let newPaddle = { ...paddle };
 
-  if (keyboard.right) {
+  if (keyboard.enter) {
+    newPaddle = getPaddle(canvas);
+    return { type: "update paddle", data: { paddle: newPaddle } };
+  } else if (keyboard.right) {
     newPaddle.x += 7;
     if (newPaddle.x + newPaddle.width > canvas.width) {
       newPaddle.x = canvas.width - newPaddle.width;

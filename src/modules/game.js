@@ -113,18 +113,12 @@ class Game {
   draw() {
     let messages = [
       { type: "clear screen" },
-      { type: "update game status" },
+      { type: "check game status" },
       { type: "draw ball" },
       { type: "draw paddle" },
       { type: "draw blocks" },
       { type: "draw dialog" },
-      updateBall(
-        this.state.ball,
-        this.state.paddle,
-        this.state.blocks,
-        this.state.status,
-        this.state.canvas
-      ),
+      updateBall(this.state),
       updatePaddle(
         this.state.paddle,
         this.state.keyboard,

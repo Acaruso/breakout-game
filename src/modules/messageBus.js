@@ -18,7 +18,7 @@ class MessageBus {
         let ctx = this.state.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.state.canvas.width, this.state.canvas.height);
       },
-      "update game status": (message) => {
+      "check game status": (message) => {
         const won = (!this.state.blocks.find(x => x.exists));
         const lost = detectBottomOfScreenCollision(
           this.state.ball, 
@@ -32,6 +32,9 @@ class MessageBus {
           this.state.status = "lost";
         }
       },
+      "update game status": (message) => {
+        this.state.status = message.data.status;
+      },
       "update ball": (message) => {
         this.state.ball = message.data.ball;
       },
@@ -40,6 +43,9 @@ class MessageBus {
       },
       "update debug text": (message) => {
         this.state.debugText = message.data.newDebugText;
+      },
+      "update blocks": (message) => {
+        this.state.blocks = message.data.blocks;
       },
       "remove block": (message) => {
         const i = message.data.blockToRemove;
@@ -73,16 +79,25 @@ class MessageBus {
       "left up": (message) => {
         this.state.keyboard.left = false;
       },
-      "enter down": (message) => {
-        // this.game.status = "restart";
 
-        this.state.ball = getBall(state.canvas);
-        this.state.paddle = getPaddle(state.canvas);
-        this.state.blocks = getBlocks(state.canvas);
-        this.state.status = "in progress";
-      
-        // restartGame(this.state);
+      "enter down": (message) => {
+        this.state.keyboard.enter = true;
       },
+      "enter up": (message) => {
+        this.state.keyboard.enter = false;
+      },
+
+      // "enter down": (message) => {
+      //   // this.game.status = "restart";
+
+      //   this.state.ball = getBall(state.canvas);
+      //   this.state.paddle = getPaddle(state.canvas);
+      //   this.state.blocks = getBlocks(state.canvas);
+      //   this.state.status = "in progress";
+      
+      //   // restartGame(this.state);
+      // },
+
       "z down": (message) => {
         logGame(this.state);
       },
