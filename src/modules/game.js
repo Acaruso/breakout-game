@@ -6,7 +6,8 @@ import { MessageBus } from "./messageBus";
 
 class Game {
   constructor(options = {}) {
-    const { logging, replay, replayRecalc } = options;
+    let { logging, replay, replayRecalc } = options;
+    logging = logging && !replay && !replayRecalc; // don't log if replaying
 
     this.state = {};
     this.state.canvas = document.getElementById("myCanvas");
@@ -17,14 +18,17 @@ class Game {
     this.state.status = "in progress";
     this.state.debugText = "";
 
-    this.messageBus = new MessageBus(this.state, { 
-      logging: logging && !replay && !replayRecalc 
-    });
+    this.messageBus = new MessageBus(this.state, { logging: logging  });
 
     addKeyboardHandlers(this.messageBus);
 
-    // weird stuff ////////////////////////////////////////////////
-
+    // replay stuff /////////////////////////////////////////////////
+    /*
+    if replay, read each line from log file and perform state update
+    if replayRecalc, only apply state updates from user input, recalculate
+      calculated values (this way you can test if a bug is fixed or not)
+    otherwise, just start draw loop (regular gameplay)
+    */
     const file = "bug-log2Copy.txt";
     const speed = 1;
     const intervalTime = (1.0 / speed) * 10.0;
@@ -97,9 +101,13 @@ class Game {
     }
   }
 
+  ///////////////////////////////////////////////////////////////////
+
   draw(state, messageBus) {
     const messages = [
       { type: "clear screen" },
+      { type: "update game status" },
+
       { type: "draw ball" },
       { type: "draw paddle" },
       { type: "draw blocks" },
@@ -117,7 +125,6 @@ class Game {
         state.status,
         state.canvas
       ),
-      { type: "update game status" },
       { type: "end of draw loop" },
     ];
 

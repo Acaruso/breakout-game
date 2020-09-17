@@ -17,7 +17,7 @@ function drawPaddle(paddle, canvas) {
 function updatePaddle(paddle, keyboard, status, canvas) {
   // why does this lag out?
   // if (status !== "in progress") {
-  //   return;
+  //   return { type: "update paddle", data: { paddle } };
   // }
 
   let newPaddle = { ...paddle };

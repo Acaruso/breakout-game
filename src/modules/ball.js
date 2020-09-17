@@ -22,6 +22,7 @@ function drawBall(ball, canvas) {
 function updateBall(ball, paddle, blocks, status, canvas) {
   if (status !== "in progress") {
     return;
+    // return { type: "update ball", data: { ball: ball } };
   }
 
   let messages = [];
@@ -42,7 +43,7 @@ function updateBall(ball, paddle, blocks, status, canvas) {
     newBall.dy = -newBall.dy;
   }
 
-  messages.push({ type: "update ball", data: { newBall } });
+  messages.push({ type: "update ball", data: { ball: newBall } });
   return messages;
 }
 

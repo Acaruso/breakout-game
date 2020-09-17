@@ -19,12 +19,11 @@ class MessageBus {
       },
       "update game status": (message) => {
         const won = (!this.game.blocks.find(x => x.exists));
-        const bottomOfScreenCollision = detectBottomOfScreenCollision(
+        const lost = detectBottomOfScreenCollision(
           this.game.ball, 
           this.game.paddle,
           this.game.canvas.height
         );
-        const lost = bottomOfScreenCollision && !won;
         
         if (won) {
           this.game.status = "win";
@@ -33,7 +32,7 @@ class MessageBus {
         }
       },
       "update ball": (message) => {
-        this.game.ball = message.data.newBall;
+        this.game.ball = message.data.ball;
       },
       "update paddle": (message) => {
         this.game.paddle = message.data.newPaddle;
@@ -100,6 +99,9 @@ class MessageBus {
     while (message = this.messages.shift()) {
       if (this.messageTable[message.type]) {
         this.messageTable[message.type](message);
+
+        // console.log(message)
+
         if (this.options.logging) {
           this.logger.log(JSON.stringify(message));
         }
