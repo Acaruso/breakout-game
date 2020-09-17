@@ -18,6 +18,10 @@ class MessageBus {
         ctx.clearRect(0, 0, this.game.canvas.width, this.game.canvas.height);
       },
       "update game status": (message) => {
+        if (this.game.status === "restart") {
+          restartGame(this.game);
+          return;
+        }
         const won = (!this.game.blocks.find(x => x.exists));
         const lost = detectBottomOfScreenCollision(
           this.game.ball, 
@@ -35,7 +39,7 @@ class MessageBus {
         this.game.ball = message.data.ball;
       },
       "update paddle": (message) => {
-        this.game.paddle = message.data.newPaddle;
+        this.game.paddle = message.data.paddle;
       },
       "update debug text": (message) => {
         this.game.debugText = message.data.newDebugText;
@@ -73,7 +77,8 @@ class MessageBus {
         this.game.keyboard.left = false;
       },
       "enter down": (message) => {
-        restartGame(this.game);
+        this.game.status = "restart";
+        // restartGame(this.game);
       },
       "z down": (message) => {
         logGame(this.game);

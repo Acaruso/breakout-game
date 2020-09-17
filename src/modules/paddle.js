@@ -35,7 +35,7 @@ function updatePaddle(paddle, keyboard, status, canvas) {
     }
   }
 
-  return { type: "update paddle", data: { newPaddle } };
+  return { type: "update paddle", data: { paddle: newPaddle } };
 }
 
 export { getPaddle, drawPaddle, updatePaddle };
