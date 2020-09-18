@@ -110,7 +110,6 @@ class MessageBus {
         this.messageTable[message.type](message);
         if (this.logging) {
           this.logger.log(JSON.stringify(message));
-          this.logger.log(JSON.stringify(this.state.ball));
         }
       }
     }

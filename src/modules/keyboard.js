@@ -18,6 +18,7 @@ function addKeyboardHandlers(messages) {
     ArrowRight: () => messages.push({ type: "right up" }),
     ArrowLeft: () => messages.push({ type: "left up" }),
     Enter: () => messages.push({ type: "enter up" }),
+    z: () => messages.push({ type: "z up" }),
   };
 
   function keyDownHandler(e) {

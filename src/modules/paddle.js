@@ -14,10 +14,8 @@ function drawPaddle(paddle, canvas) {
   drawRect(paddle, canvas);
 }
 
-function updatePaddle(paddle, keyboard, status, canvas) {
-  // if (status !== "in progress") {
-  //   return { type: "update paddle", data: { paddle } };
-  // }
+function updatePaddle(state) {
+  let { paddle, keyboard, canvas } = state;
 
   let newPaddle = { ...paddle };
 

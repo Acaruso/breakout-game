@@ -73,12 +73,7 @@ class Game {
           const ballMess = updateBall(this.state);
           messageBus.push(ballMess);
         } else if (message.type === "update paddle") {
-          const paddleMess = updatePaddle(
-            this.state.paddle,
-            this.state.keyboard,
-            this.state.status,
-            this.state.canvas
-          );
+          const paddleMess = updatePaddle(this.state);
           messageBus.push(paddleMess);
         } else {
           messageBus.push(message);
@@ -110,12 +105,7 @@ class Game {
       { type: "draw blocks" },
       { type: "draw dialog" },
       updateBall(this.state),
-      updatePaddle(
-        this.state.paddle,
-        this.state.keyboard,
-        this.state.status,
-        this.state.canvas
-      ),
+      updatePaddle(this.state),
       { type: "end of draw loop" },
     ];
 
