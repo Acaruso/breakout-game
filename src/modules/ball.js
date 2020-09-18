@@ -25,6 +25,7 @@ function updateBall(state) {
   let messages = [];
 
   if (keyboard.enter) {
+    // if reset game
     let newBall = getBall(canvas);
     let newBlocks = getBlocks(canvas);
 
@@ -34,7 +35,7 @@ function updateBall(state) {
 
     return messages;
   } else if (status !== "in progress") {
-    // return;
+    // if game over
     return { type: "update ball", data: { ball: ball } };
   }
 

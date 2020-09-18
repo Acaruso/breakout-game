@@ -4,6 +4,7 @@ import { getKeyboard, addKeyboardHandlers } from "./keyboard";
 import { getBlocks } from "./blocks";
 import { MessageBus } from "./messageBus";
 import { Logger } from "./logger";
+import { updateDebugText } from "./dialog";
 
 class Game {
   constructor(options = {}) {
@@ -35,7 +36,8 @@ class Game {
       calculated values (this way you can test if a bug is fixed or not)
     otherwise, just start draw loop (regular gameplay)
     */
-    const file = "bug-log2Copy.txt";
+    const file = "bug-log4.txt";
+    console.log('test')
     const speed = 1;
     const intervalTime = (1.0 / speed) * 10.0;
     const messageBus = this.messageBus;
@@ -69,20 +71,14 @@ class Game {
         const message = JSON.parse(line);
 
         if (message.type === "update ball") {
-          const ballMess = updateBall(
-            game.ball,
-            game.paddle,
-            game.blocks,
-            game.status,
-            game.canvas
-          );
+          const ballMess = updateBall(this.state);
           messageBus.push(ballMess);
         } else if (message.type === "update paddle") {
           const paddleMess = updatePaddle(
-            game.paddle,
-            game.keyboard,
-            game.status,
-            game.canvas
+            this.state.paddle,
+            this.state.keyboard,
+            this.state.status,
+            this.state.canvas
           );
           messageBus.push(paddleMess);
         } else {
@@ -131,35 +127,6 @@ class Game {
     this.messageBus.push(messages);
     this.messageBus.handleMessages();
   }
-
-  // draw(state, messageBus) {
-  //   const messages = [
-  //     { type: "clear screen" },
-  //     { type: "update game status" },
-
-  //     { type: "draw ball" },
-  //     { type: "draw paddle" },
-  //     { type: "draw blocks" },
-  //     { type: "draw dialog" },
-  //     updateBall(
-  //       state.ball,
-  //       state.paddle,
-  //       state.blocks,
-  //       state.status,
-  //       state.canvas
-  //     ),
-  //     updatePaddle(
-  //       state.paddle,
-  //       state.keyboard,
-  //       state.status,
-  //       state.canvas
-  //     ),
-  //     { type: "end of draw loop" },
-  //   ];
-
-  //   messageBus.push(messages);
-  //   messageBus.handleMessages();
-  // }
 }
 
 function restartGame(state) {

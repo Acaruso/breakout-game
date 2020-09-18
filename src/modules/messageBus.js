@@ -1,9 +1,8 @@
-import { getBall, drawBall, detectBottomOfScreenCollision } from "./ball";
-import { getPaddle, drawPaddle } from "./paddle";
-import { getBlocks, drawBlocks } from "./blocks";
+import { drawBall, detectBottomOfScreenCollision } from "./ball";
+import { drawPaddle } from "./paddle";
+import { drawBlocks } from "./blocks";
 import { drawWinDialog, drawLostDialog, drawDebugDialog } from "./dialog";
-import { restartGame, logGame } from "./game";
-import { Logger } from "./logger";
+import { logGame } from "./game";
 
 class MessageBus {
   constructor(state, options = {}) {
@@ -86,18 +85,9 @@ class MessageBus {
       "enter up": (message) => {
         this.state.keyboard.enter = false;
       },
-
       // "enter down": (message) => {
-      //   // this.game.status = "restart";
-
-      //   this.state.ball = getBall(state.canvas);
-      //   this.state.paddle = getPaddle(state.canvas);
-      //   this.state.blocks = getBlocks(state.canvas);
-      //   this.state.status = "in progress";
-      
       //   // restartGame(this.state);
       // },
-
       "z down": (message) => {
         logGame(this.state);
       },
@@ -111,10 +101,6 @@ class MessageBus {
     } else {
       this.messages.push(newMessage);    
     }
-  }
-
-  concat(newMessages) {
-    this.messages = this.messages.concat(newMessages);
   }
 
   handleMessages() {

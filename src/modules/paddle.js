@@ -15,9 +15,9 @@ function drawPaddle(paddle, canvas) {
 }
 
 function updatePaddle(paddle, keyboard, status, canvas) {
-  if (status !== "in progress") {
-    return { type: "update paddle", data: { paddle } };
-  }
+  // if (status !== "in progress") {
+  //   return { type: "update paddle", data: { paddle } };
+  // }
 
   let newPaddle = { ...paddle };
 
