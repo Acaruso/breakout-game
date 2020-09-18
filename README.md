@@ -2,7 +2,9 @@
 Breakout game w/ Electron
 
 to install:
-npm install
+
+`npm install`
 
 to run:
-npm start
+
+`npm start`
