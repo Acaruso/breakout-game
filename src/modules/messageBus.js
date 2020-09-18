@@ -66,29 +66,25 @@ class MessageBus {
       "draw debug dialog" : (message) => {
         drawDebugDialog(this.state.debugText, this.state.canvas);
       },
-      "right down": (message) => {
+      "ArrowRight:keydown": (message) => {
         this.state.keyboard.right = true;
       },
-      "left down": (message) => {
+      "ArrowLeft:keydown": (message) => {
         this.state.keyboard.left = true;
       },
-      "right up": (message) => {
+      "ArrowRight:keyup": (message) => {
         this.state.keyboard.right = false;
       },
-      "left up": (message) => {
+      "ArrowLeft:keyup": (message) => {
         this.state.keyboard.left = false;
       },
-
-      "enter down": (message) => {
+      "Enter:keydown": (message) => {
         this.state.keyboard.enter = true;
       },
-      "enter up": (message) => {
+      "Enter:keyup": (message) => {
         this.state.keyboard.enter = false;
       },
-      // "enter down": (message) => {
-      //   // restartGame(this.state);
-      // },
-      "z down": (message) => {
+      "z:keydown": (message) => {
         logGame(this.state);
       },
       "end of draw loop": (message) => { },

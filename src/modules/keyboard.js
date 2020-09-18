@@ -7,30 +7,12 @@ function getKeyboard() {
 }
 
 function addKeyboardHandlers(messages) {
-  const keyDownHandlersTable = {
-    ArrowRight: () => messages.push({ type: "right down" }),
-    ArrowLeft: () => messages.push({ type: "left down" }),
-    Enter: () => messages.push({ type: "enter down" }),
-    z: () => messages.push({ type: "z down" }),
-  };
-
-  const keyUpHandlersTable = {
-    ArrowRight: () => messages.push({ type: "right up" }),
-    ArrowLeft: () => messages.push({ type: "left up" }),
-    Enter: () => messages.push({ type: "enter up" }),
-    z: () => messages.push({ type: "z up" }),
-  };
-
-  function keyDownHandler(e) {
-    keyDownHandlersTable[e.key] && keyDownHandlersTable[e.key]();
+  function keyHandler(e) {
+    messages.push({ type: `${e.key}:${e.type}` });
   }
 
-  function keyUpHandler(e) {
-    keyUpHandlersTable[e.key] && keyUpHandlersTable[e.key]();
-  }
-
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
+  document.addEventListener("keydown", keyHandler, false);
+  document.addEventListener("keyup", keyHandler, false);
 }
 
 export { getKeyboard, addKeyboardHandlers };
