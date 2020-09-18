@@ -1,6 +1,6 @@
 import { Game } from "./modules/game";
 
-let game = new Game({ logging: true, replay: false, replayRecalc: true });
+let game = new Game({ logging: true, replay: false, replayRecalc: false });
 
 /*
 all state updates go thru messaging system
