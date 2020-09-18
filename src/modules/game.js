@@ -37,7 +37,6 @@ class Game {
     otherwise, just start draw loop (regular gameplay)
     */
     const file = "bug-log4.txt";
-    console.log('test')
     const speed = 1;
     const intervalTime = (1.0 / speed) * 10.0;
     const messageBus = this.messageBus;
@@ -96,11 +95,7 @@ class Game {
 
       setInterval(() => lr.resume(), intervalTime);
     } else {
-      this.state.interval = setInterval(
-        () => this.draw(),
-        // () => this.draw(this.state, this.messageBus),
-        10
-      );
+      this.state.interval = setInterval(() => this.draw(), 10);
     }
   }
 

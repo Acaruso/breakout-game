@@ -53,7 +53,8 @@ function updateBall(state) {
   } else if (detectTopOfScreenCollision(futureBall)) {
     newBall.dy = -newBall.dy;
   } else if (detectPaddleCollision(futureBall, paddle)) {
-    newBall.dy = -newBall.dy;
+    // newBall.dy = -newBall.dy;
+    newBall.dy = Math.abs(newBall.dy) * -1;
   }
 
   messages.push({ type: "update ball", data: { ball: newBall } });
