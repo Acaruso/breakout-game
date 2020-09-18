@@ -24,8 +24,7 @@ function updateBall(state) {
   let { ball, paddle, blocks, keyboard, status, canvas } = state;
   let messages = [];
 
-  if (keyboard.enter) {
-    // if reset game
+  if (keyboard.enter) { // if reset game
     let newBall = getBall(canvas);
     let newBlocks = getBlocks(canvas);
 
@@ -34,8 +33,7 @@ function updateBall(state) {
     messages.push({ type: "update game status", data: { status: "in progress" } });
 
     return messages;
-  } else if (status !== "in progress") {
-    // if game over
+  } else if (status !== "in progress") { // if game over
     return { type: "update ball", data: { ball: ball } };
   }
 
@@ -53,7 +51,6 @@ function updateBall(state) {
   } else if (detectTopOfScreenCollision(futureBall)) {
     newBall.dy = -newBall.dy;
   } else if (detectPaddleCollision(futureBall, paddle)) {
-    // newBall.dy = -newBall.dy;
     newBall.dy = Math.abs(newBall.dy) * -1;
   }
 
