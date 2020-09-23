@@ -36,8 +36,7 @@ class Game {
       calculated values (this way you can test if a bug is fixed or not)
     otherwise, just start draw loop (regular gameplay)
     */
-    /*
-    const file = "bug-log4.txt";
+    const file = "logs/1600820156508-log.txt";
     const speed = 1;
     const intervalTime = (1.0 / speed) * 10.0;
     const messageBus = this.messageBus;
@@ -73,9 +72,8 @@ class Game {
         if (message.type === "update ball") {
           const ballMess = updateBall(this.state);
           messageBus.push(ballMess);
-        } else if (message.type === "update paddle") {
-          const paddleMess = updatePaddle(this.state);
-          messageBus.push(paddleMess);
+          const keyboardMess = handleKeyboardEvents(this.state);
+          messageBus.push(keyboardMess);
         } else {
           messageBus.push(message);
         }
@@ -93,8 +91,8 @@ class Game {
     } else {
       this.state.interval = setInterval(() => this.draw(), 10);
     }
-    */
-    this.state.interval = setInterval(() => this.draw(), 10);
+
+    // this.state.interval = setInterval(() => this.draw(), 10);
   }
 
   ///////////////////////////////////////////////////////////////////
