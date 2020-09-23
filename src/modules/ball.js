@@ -24,16 +24,20 @@ function updateBall(state) {
   let { ball, paddle, blocks, keyboard, status, canvas } = state;
   let messages = [];
 
-  if (keyboard.enter) { // if reset game
-    let newBall = getBall(canvas);
-    let newBlocks = getBlocks(canvas);
+  // if (keyboard.enter) { // if reset game
+  //   let newBall = getBall(canvas);
+  //   let newBlocks = getBlocks(canvas);
 
-    messages.push({ type: "update ball", data: { ball: newBall } });
-    messages.push({ type: "update blocks", data: { blocks: newBlocks } });
-    messages.push({ type: "update game status", data: { status: "in progress" } });
+  //   messages.push({ type: "update ball", data: { ball: newBall } });
+  //   messages.push({ type: "update blocks", data: { blocks: newBlocks } });
+  //   messages.push({ type: "update game status", data: { status: "in progress" } });
 
-    return messages;
-  } else if (status !== "in progress") { // if game over
+  //   return messages;
+  // } else if (status !== "in progress") { // if game over
+  //   return { type: "update ball", data: { ball: ball } };
+  // }
+
+  if (status !== "in progress") { // if game over
     return { type: "update ball", data: { ball: ball } };
   }
 

@@ -1,7 +1,7 @@
 import { drawBall, detectBottomOfScreenCollision } from "./ball";
 import { drawPaddle } from "./paddle";
 import { drawBlocks } from "./blocks";
-import { drawWinDialog, drawLostDialog, drawDebugDialog } from "./dialog";
+import { drawWinLostDialog, drawDebugDialog } from "./dialog";
 import { logGame } from "./game";
 
 class MessageBus {
@@ -59,9 +59,8 @@ class MessageBus {
       "draw blocks": (message) => {
         drawBlocks(this.state.blocks, this.state.canvas);
       },
-      "draw dialog": (message) => {
-        drawWinDialog(this.state.status, this.state.canvas);
-        drawLostDialog(this.state.status, this.state.canvas);
+      "draw win lost dialog": (message) => {
+        drawWinLostDialog(this.state.status, this.state.canvas);
       },
       "draw debug dialog" : (message) => {
         drawDebugDialog(this.state.debugText, this.state.canvas);

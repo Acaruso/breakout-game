@@ -4,22 +4,16 @@ function drawDialog(text, pixels, x, y, canvas) {
   ctx.fillText(text, x, y);
 }
 
-function drawWinDialog(status, canvas) {
+function drawWinLostDialog(status, canvas) {
+  const pixels = 32;
+  const x = canvas.width / 3;
+  const y = canvas.height / 2;
+
   if (status === "win") {
-    const pixels = 32;
-    const x = canvas.width / 3;
-    const y = canvas.height / 2;
     drawDialog("You win", pixels, x, y, canvas);
     const newY = y + pixels;
     drawDialog("press enter", pixels, x, newY, canvas);
-  }
-}
-
-function drawLostDialog(status, canvas) {
-  if (status === "lost") {
-    const pixels = 32;
-    const x = canvas.width / 3;
-    const y = canvas.height / 2;
+  } else if (status === "lost") {
     drawDialog("You lost", pixels, x, y, canvas);
     const newY = y + pixels;
     drawDialog("press enter", pixels, x, newY, canvas);
@@ -42,4 +36,4 @@ function updateDebugText(text) {
   };
 }
 
-export { drawWinDialog, drawLostDialog, drawDebugDialog, updateDebugText };
+export { drawWinLostDialog, drawDebugDialog, updateDebugText };
